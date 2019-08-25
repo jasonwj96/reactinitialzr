@@ -4,13 +4,16 @@ import "./home.scss";
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [btnClassName, setbtnClassName] = useState("create-btn");
+  const [formClassName, setformClassName] = useState("form");
 
   const handleCreate = () => {
     setLoading(!loading);
     if (btnClassName === "create-btn") {
       setbtnClassName("create-btn expand");
+      setformClassName("form collapsed");
     } else {
       setbtnClassName("create-btn");
+      setformClassName("form expanded");
     }
   };
 
@@ -22,11 +25,18 @@ const Home = () => {
         </p>
       </div>
 
-      <div className="form">
+      <div className={formClassName}>
         <p>Nuevo proyecto React.js</p>
         <div className="input">
           <fieldset>
             <legend>Nombre del proyecto</legend>
+            <input type="text" />
+          </fieldset>
+        </div>
+
+        <div className="input">
+          <fieldset>
+            <legend>Ruta del proyecto</legend>
             <input type="text" />
           </fieldset>
         </div>
@@ -72,10 +82,20 @@ const Home = () => {
           )}
         </div>
       </button>
-      {/* 
+
       <div className="console">
-        <p>Console</p>
-      </div> */}
+        <div className="console-header">
+          <p>proyectautomate.py</p>
+          <p>index.html</p>
+        </div>
+        <p>
+          Compiled successfully! <br /> <br /> You can now view reactinitializr
+          in the browser. <br /> Local: http://localhost:3000/ <br /> On Your
+          Network: http://192.168.56.1:3000/ <br /> <br /> Note that the
+          development build is not optimized. To create a production build, use
+          npm run build.
+        </p>
+      </div>
     </div>
   );
 };
