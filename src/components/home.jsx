@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./home.scss";
 
 const Home = () => {
@@ -22,7 +22,36 @@ const Home = () => {
         </p>
       </div>
 
-      <div className="form"></div>
+      <div className="form">
+        <p>Nuevo proyecto React.js</p>
+        <div className="input">
+          <fieldset>
+            <legend>Nombre del proyecto</legend>
+            <input type="text" />
+          </fieldset>
+        </div>
+
+        <div className="input">
+          <fieldset>
+            <legend>Nombre del repositorio Github</legend>
+            <input type="text" />
+          </fieldset>
+        </div>
+
+        <div className="input">
+          <fieldset>
+            <legend>Usuario Github</legend>
+            <input type="text" />
+          </fieldset>
+        </div>
+
+        <div className="input">
+          <fieldset>
+            <legend>Contraseña Github</legend>
+            <input type="password" />
+          </fieldset>
+        </div>
+      </div>
 
       <button
         id="create-button"
@@ -39,14 +68,14 @@ const Home = () => {
               <div>.</div>
             </div>
           ) : (
-            <p>Crear</p>
+            <p>Crear proyecto</p>
           )}
         </div>
       </button>
-
+      {/* 
       <div className="console">
         <p>Console</p>
-      </div>
+      </div> */}
     </div>
   );
 };

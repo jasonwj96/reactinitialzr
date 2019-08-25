@@ -1,3 +1,5 @@
+$input-color: #ffffff;
+
 @keyframes spin {
   100% {
     transform: rotate(360deg);
@@ -51,17 +53,66 @@
   .form {
     display: flex;
     flex-flow: column;
-    justify-content: center;
     align-items: center;
-    width: auto;
+    width: 100%;
     height: auto;
-    padding: 10px;
     z-index: 0;
+    margin: 10px 0px 30px 0;
+
+    p {
+      color: #fff;
+      font-family: "Varela Round", sans-serif;
+      width: 100%;
+      text-align: center;
+      font-size: 2em;
+      margin: 20px 0;
+    }
+
+    .input {
+      display: flex;
+      flex-flow: column;
+      width: 100%;
+      max-width: 600px;
+      min-width: 200px;
+
+      fieldset {
+        border: 2px solid $input-color;
+        border-radius: 4px;
+        height: auto;
+        width: auto;
+        margin: 10px 20px;
+        box-sizing: border-box;
+        border-radius: 50px;
+        font-family: "Varela Round", sans-serif;
+
+        legend {
+          color: $input-color;
+          width: auto;
+          margin-left: 5px;
+          border: 2px solid transparent;
+          font-size: 0.8em;
+          text-align: left;
+        }
+
+        input {
+          color: #fff;
+          width: 100%;
+          max-width: auto;
+          padding: 0 10px;
+          font-size: 1em;
+          outline: none;
+          border: none;
+          background-color: transparent;
+          font-family: "Varela Round", sans-serif;
+        }
+      }
+    }
   }
 
   .create-btn {
     width: 250px;
     height: 60px;
+    min-height: 60px;
     padding: 0px;
     border-radius: 50px;
     display: flex;
