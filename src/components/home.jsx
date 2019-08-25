@@ -93,11 +93,18 @@ const Home = () => {
         </div>
         <div className="prompt">
           <p>
-            Compiled successfully! <br /> <br /> You can now view
-            reactinitializr in the browser. <br /> Local: http://localhost:3000/{" "}
-            <br /> On Your Network: http://192.168.56.1:3000/ <br /> <br /> Note
-            that the development build is not optimized. To create a production
-            build, use npm run build.
+            <p className="success-msg">Compiled successfully!</p>
+            <p className="msg">
+              You can now view reactinitializr in the browser.
+            </p>
+            <p className="info-msg">Local: http://localhost:3000/</p>
+            <p className="info-msg">
+              On Your Network: http://192.168.56.1:3000/
+            </p>
+            <p className="msg">
+              Note that the development build is not optimized. To create a
+              production build, use npm run build.
+            </p>
           </p>
         </div>
       </div>

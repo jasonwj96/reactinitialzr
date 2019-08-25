@@ -16,9 +16,9 @@ username = config.get("DEFAULT", "username")
 password = config.get("DEFAULT", "password")
 # project variables
 directory = config.get("DEFAULT", "directory")
+editor = config.get("DEFAULT", "editor")
 projectName = ""
 projectType = ""
-editor = config.get("DEFAULT", "editor")
 
 
 # Initializes global variables

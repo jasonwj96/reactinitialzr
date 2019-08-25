@@ -276,10 +276,10 @@ $console-color: #fff;
       }
 
       p:nth-child(2) {
-        background-color: #0069be;
+        background-color: #141414;
 
         &:hover {
-          background-color: lighten(#0069be, 10%);
+          background-color: lighten(#141414, 10%);
         }
       }
 
@@ -297,6 +297,20 @@ $console-color: #fff;
       padding: 30px 20px;
       width: auto;
       height: 100%;
+
+      .error-msg {
+        color: #eb0000;
+      }
+      .msg {
+        color: #fff;
+      }
+      .success-msg {
+        color: #6adb00;
+      }
+
+      .info-msg {
+        color: #008cff;
+      }
     }
   }
 }
