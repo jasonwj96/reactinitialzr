@@ -4,16 +4,19 @@ import "./home.scss";
 const Home = () => {
   const [loading, setLoading] = useState(false);
   const [btnClassName, setbtnClassName] = useState("create-btn");
-  const [formClassName, setformClassName] = useState("form");
+  const [formClassName, setformClassName] = useState("form expanded");
+  const [consoleClassName, setconsoleClassName] = useState("console collapsed");
 
   const handleCreate = () => {
     setLoading(!loading);
-    if (btnClassName === "create-btn") {
-      setbtnClassName("create-btn expand");
+    if (!loading) {
+      setbtnClassName("create-btn expand-btn");
       setformClassName("form collapsed");
+      setconsoleClassName("console expanded");
     } else {
       setbtnClassName("create-btn");
       setformClassName("form expanded");
+      setconsoleClassName("console collapsed");
     }
   };
 
@@ -83,18 +86,20 @@ const Home = () => {
         </div>
       </button>
 
-      <div className="console">
+      <div className={consoleClassName}>
         <div className="console-header">
           <p>proyectautomate.py</p>
           <p>index.html</p>
         </div>
-        <p>
-          Compiled successfully! <br /> <br /> You can now view reactinitializr
-          in the browser. <br /> Local: http://localhost:3000/ <br /> On Your
-          Network: http://192.168.56.1:3000/ <br /> <br /> Note that the
-          development build is not optimized. To create a production build, use
-          npm run build.
-        </p>
+        <div className="prompt">
+          <p>
+            Compiled successfully! <br /> <br /> You can now view
+            reactinitializr in the browser. <br /> Local: http://localhost:3000/{" "}
+            <br /> On Your Network: http://192.168.56.1:3000/ <br /> <br /> Note
+            that the development build is not optimized. To create a production
+            build, use npm run build.
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -83,15 +83,15 @@ $console-color: #fff;
     animation-duration: 500ms;
     animation-fill-mode: forwards;
     animation-timing-function: ease-in-out;
-    transform: height 200ms ease-in-out;
+    transition: display 200ms ease-in-out;
 
     p {
       color: #fff;
-      font-family: "Roboto", sans-serif;
-      width: 100%;
+      font-family: "Varela Round", sans-serif;
+      width: auto;
       text-align: center;
-      font-size: 2em;
-      margin: 20px;
+      font-size: 1.8em;
+      margin: 20px 10px 40px 10px;
     }
 
     .input {
@@ -108,7 +108,7 @@ $console-color: #fff;
         width: auto;
         margin: 10px 20px;
         box-sizing: border-box;
-        border-radius: 50px;
+        border-radius: 10px;
         font-family: "Varela Round", sans-serif;
 
         legend {
@@ -136,20 +136,21 @@ $console-color: #fff;
   }
 
   .collapsed {
-    animation-name: collapse;
+    // animation-name: collapse;
     display: none;
   }
 
   .expanded {
-    animation-name: expanded;
+    // animation-name: expanded;
+    display: flex;
   }
 
   .create-btn {
     width: 250px;
-    height: 60px;
-    min-height: 60px;
+    height: 50px;
+    min-height: 50px;
     padding: 0px;
-    border-radius: 50px;
+    border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -163,7 +164,7 @@ $console-color: #fff;
     z-index: 1;
     overflow: hidden;
     cursor: pointer;
-    transition: width 200ms ease-in-out;
+    transition: width 500ms ease;
 
     &::before {
       content: "";
@@ -203,7 +204,6 @@ $console-color: #fff;
         i {
           color: #fff;
           font-size: 0.8em;
-          margin: 0px;
           margin: 5px;
         }
 
@@ -233,7 +233,7 @@ $console-color: #fff;
     }
   }
 
-  .expand {
+  .expand-btn {
     width: 100%;
     border-radius: 0;
     cursor: default;
@@ -245,18 +245,18 @@ $console-color: #fff;
   }
 
   .console {
+    flex-flow: column;
     width: auto;
     height: 500px;
     background-color: #000;
     border-radius: 10px;
-    margin: 20px 10px;
-    font-family: "Inconsolata", monospace;
+    margin: 70px 10px 20px 10px;
     color: $console-color;
     overflow: hidden;
-
-    p {
-      padding: 30px 20px;
-    }
+    animation-duration: 500ms;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-in-out;
+    transition: display 200ms ease-in-out;
 
     .console-header {
       display: flex;
@@ -290,6 +290,13 @@ $console-color: #fff;
         padding: 10px 20px;
         border-radius: 10px 10px 0 0;
       }
+    }
+
+    .prompt {
+      font-family: "Inconsolata", monospace;
+      padding: 30px 20px;
+      width: auto;
+      height: 100%;
     }
   }
 }
