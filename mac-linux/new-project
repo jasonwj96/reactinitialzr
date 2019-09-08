@@ -1,3 +1,3 @@
 #!/bin/bash
-pip3 install -r ~/ProjectAutomation/requirements.txt 2>&1
-python3 ~/ProjectAutomation/automate_project.py
+pip3 install -r ~/reactinitialzr/requirements.txt 2>&1
+python3 ~/reactinitialzr/app.py

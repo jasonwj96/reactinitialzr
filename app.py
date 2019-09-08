@@ -46,12 +46,12 @@ def GetCredentials():
     global password
     repoName = input("Enter a name for the GitHub repository: ")
 
-#    if (username == ""):
-#         # TODO: replace this with electron GUI
-#         username = input("Enter your GitHub username: ")
-#     if (username == "" or password == ""):
-#         # TODO: replace this with electron GUI
-#         password = getpass.getpass("Enter your GitHub password: ")
+    if (username == ""):
+        # TODO: replace this with electron GUI
+        username = input("Enter your GitHub username: ")
+    if (username == "" or password == ""):
+        # TODO: replace this with electron GUI
+        password = getpass.getpass("Enter your GitHub password: ")
 
 
 # creates GitHub repositort if the credentials given are valid
@@ -81,13 +81,16 @@ def DeleteGitHubRepo():
         repo.delete()
     except Exception as e:
         print(str(e))
-        print("Could not delete new repository \'{}\'. Please delete it online.".format(
-            repoName))
+        print("""Could not delete new repository \'{}\'. Delete it 
+        online.""".format(repoName))
 
 
 # loops until there is a valid file path
 if not os.path.isdir(directory):
-    print("Invalid string for the directory option in script.config; please make sure the directory in script.config exists to stop seeing this message in the future.")
+    print("""Invalid string for the directory option in script.config; 
+    please make sure the directory in script.config exists
+    to stop seeing this message in
+    the future.""")
 
     directory = input("Enter valid local path: ")
 
@@ -107,7 +110,7 @@ while os.path.isdir(directory + "\\" + projectName):
 
 
 # requests user for project type
-projectType = input("Project type: ")
+# projectType = input("Project type: ")
 
 
 # loops until project type is valid  # TODO: refactor this
@@ -122,11 +125,10 @@ projectType = input("Project type: ")
 
 # loops until GitHub repo has been created successfully
 while CreateGitHubRepo() is False:
-    print("Something went wrong when creating the GitHub repo. See above for more details.")
-
+    print("Something went wrong when creating the GitHub repo")
 
 try:
-    # changes into correct directory and runs the project proccess for the declared project type
+    # changes into correct directory and runs the project process
     os.chdir(directory)
     React()
 
@@ -135,7 +137,8 @@ try:
     subprocess.call("git add .", shell=True)
     subprocess.call("git commit -m \"initial commit\"", shell=True)
     subprocess.call(
-        "git remote add origin https://github.com/{}/{}".format(username, repoName), shell=True)
+        """git remote add origin https://github.com/{}
+        /{}""".format(username, repoName), shell=True)
     subprocess.call("git push -u origin master", shell=True)
 
     # opens project in editor
