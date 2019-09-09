@@ -2,26 +2,26 @@ import os
 import subprocess
 from github import Github
 import configparser
+import pyfiglet
 
-# configure parser for script.config
+
+# configure parser para el script.config
 config = configparser.ConfigParser()
 config.read("script.config")
 
-# global variables
+# variables globales
 projectName = ""
 repoName = ""
 repoName = ""
-# get default credentials from script.config file
 username = config.get("DEFAULT", "username")
 password = config.get("DEFAULT", "password")
-# project variables
 directory = config.get("DEFAULT", "directory")
 editor = config.get("DEFAULT", "editor")
 projectName = ""
 projectType = ""
 
 
-# Initializes global variables
+# Inicializa las variables globales
 def Init(project, repo):
     global projectName
     global repoName
@@ -29,8 +29,7 @@ def Init(project, repo):
     repoName = repo
 
 
-# This process calls create-react-app to create a new React project
-# given a project name
+# Proceso para crear nueva aplicación react
 def React():
     subprocess.check_call(
         "npx create-react-app {}".format(projectName), shell=True)
@@ -39,22 +38,20 @@ def React():
     Init(projectName, repoName)
 
 
-# Gets the user's Github credentials to create a new repository
+# Proceso para obtener credenciales Github
 def GetCredentials():
     global repoName
     global username
     global password
-    repoName = input("Enter a name for the GitHub repository: ")
+    repoName = input("Introduzca un nombre para el repositorio Github: ")
 
     if (username == ""):
-        # TODO: replace this with electron GUI
-        username = input("Enter your GitHub username: ")
+        username = input("Introduzca su usuario de Github: ")
     if (username == "" or password == ""):
-        # TODO: replace this with electron GUI
-        password = getpass.getpass("Enter your GitHub password: ")
+        password = getpass.getpass("Introduzca su contraseña de GitHub: ")
 
 
-# creates GitHub repositort if the credentials given are valid
+# Proceso que crea el repositorio Github si las credenciales son válidas
 def CreateGitHubRepo():
     global repoName
     global username
@@ -83,6 +80,12 @@ def DeleteGitHubRepo():
         print(str(e))
         print("""Could not delete new repository \'{}\'. Delete it 
         online.""".format(repoName))
+
+
+# Program starts here
+print("=".center(65, "="))
+print(pyfiglet.figlet_format("React  Initialzr"))
+print("=".center(65, "="))
 
 
 # loops until there is a valid file path
