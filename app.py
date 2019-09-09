@@ -3,6 +3,7 @@ import subprocess
 from github import Github
 import configparser
 import pyfiglet
+import getpass
 
 
 # configure parser para el script.config
@@ -48,7 +49,8 @@ def GetCredentials():
     if (username == ""):
         username = input("Introduzca su usuario de Github: ")
     if (username == "" or password == ""):
-        password = getpass.getpass("Introduzca su contraseña de GitHub: ")
+        password = getpass.getpass(prompt="""
+        Introduzca su contraseña de GitHub: """, stream=None)
 
 
 # Proceso que crea el repositorio Github si las credenciales son válidas
