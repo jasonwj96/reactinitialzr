@@ -86,7 +86,7 @@ def DeleteGitHubRepo():
 
 
 # Programa principal
-while exitApp == false:
+while exitApp is False:
     print("=".center(65, "="))
     print(pyfiglet.figlet_format("React  Initialzr"))
     print("=".center(65, "="))
@@ -150,6 +150,6 @@ while exitApp == false:
         DeleteGitHubRepo()
 
     answer = input("Desea crear otro repositorio? (Y/n)")
-    if(answer == "n"):
+    if(answer is "n"):
         exitApp = true
         print("Cerrando la aplicación...")
