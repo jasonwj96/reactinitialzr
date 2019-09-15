@@ -19,6 +19,7 @@ directory = config.get("DEFAULT", "directory")
 editor = config.get("DEFAULT", "editor")
 projectName = ""
 projectType = ""
+exitApp = false
 
 
 # Inicializa las variables globales
@@ -78,87 +79,75 @@ def DeleteGitHubRepo():
         repo.delete()
     except Exception as e:
         print(str(e))
-        print("""Could not delete new repository \'{}\'. Delete it 
-        online.""".format(repoName))
+        print("""No se puedo eliminar el repositorio \'{}\'. Elimínelo manualmente.""".format(
+            repoName))
 
 
-# Program starts here
-print("=".center(65, "="))
-print(pyfiglet.figlet_format("React  Initialzr"))
-print("=".center(65, "="))
+# Programa principal
+while exitApp == false:
+    print("=".center(65, "="))
+    print(pyfiglet.figlet_format("React  Initialzr"))
+    print("=".center(65, "="))
 
+    # loops until there is a valid file path
+    if not os.path.isdir(directory):
+        print("""Invalid string for the directory option in script.config;
+        please make sure the directory in script.config exists
+        to stop seeing this message in
+        the future.""")
 
-# loops until there is a valid file path
-if not os.path.isdir(directory):
-    print("""Invalid string for the directory option in script.config; 
-    please make sure the directory in script.config exists
-    to stop seeing this message in
-    the future.""")
-
-    directory = input("Enter valid local path: ")
-
-    while not os.path.isdir(directory):
-        print("Invalid local path; please try again.")
         directory = input("Enter valid local path: ")
 
+        while not os.path.isdir(directory):
+            print("Invalid local path; please try again.")
+            directory = input("Enter valid local path: ")
 
-# requests user for project name
-projectName = input("Project name: ")
+    # requests user for project name
+    projectName = input("Nombre del proyecto: ")
 
+    # loops until there is a valid project name
+    while os.path.isdir(directory + "\\" + projectName):
+        print("Error: el nombre del proyecto ya existe, introduzca otro.")
+        projectName = input("Nombre del proyecto: ")
 
-# loops until there is a valid project name
-while os.path.isdir(directory + "\\" + projectName):
-    print("Project name already exists, please try again.")
-    projectName = input("Project name: ")
+    # loops until GitHub repo has been created successfully
+    while CreateGitHubRepo() is False:
+        print("Hubo un error al crear el repositorio Github")
 
+    try:
+        # changes into correct directory and runs the project process
+        os.chdir(directory)
+        React()
 
-# requests user for project type
-# projectType = input("Project type: ")
+        # git proccesses
+        subprocess.call("git init", shell=True)
+        subprocess.call("git add .", shell=True)
+        subprocess.call("git commit -m \"initial commit\"", shell=True)
+        subprocess.call(
+            """git remote add origin https://github.com/{}
+            /{}""".format(username, repoName), shell=True)
+        subprocess.call("git push -u origin master", shell=True)
 
+        # opens project in editor
+        if editor is not "none":
+            try:
+                subprocess.call("{} .".format(editor), shell=True)
 
-# loops until project type is valid  # TODO: refactor this
-# while projectType not in project_types.types:
-#     print("{}Invalid project type; please try again.{}".format(
-#         Fore.YELLOW, Fore.WHITE))
-#     print("Valid project types: ")
-#     for key, value in project_types.types.items():
-#         print(Fore.BLUE + key + Fore.WHITE)
-#     projectType = input("Project type: ")
+            except Exception as e:
+                print("No se encontró un editor: {}".format(str(e)))
 
+        else:
+            print("No editor selected.")
+            print("Project created succesfully!")
 
-# loops until GitHub repo has been created successfully
-while CreateGitHubRepo() is False:
-    print("Something went wrong when creating the GitHub repo")
+        # starts dev server for react projects
+        subprocess.call("npm start", shell=True)
 
-try:
-    # changes into correct directory and runs the project process
-    os.chdir(directory)
-    React()
+    except Exception as e:
+        print("Hubo un error al crear el proyecto:{}")
+        DeleteGitHubRepo()
 
-    # git proccesses
-    subprocess.call("git init", shell=True)
-    subprocess.call("git add .", shell=True)
-    subprocess.call("git commit -m \"initial commit\"", shell=True)
-    subprocess.call(
-        """git remote add origin https://github.com/{}
-        /{}""".format(username, repoName), shell=True)
-    subprocess.call("git push -u origin master", shell=True)
-
-    # opens project in editor
-    if editor is not "none":
-        try:
-            subprocess.call("{} .".format(editor), shell=True)
-
-        except Exception as e:
-            print("No editor found: {}".format(str(e)))
-
-    else:
-        print("No editor selected.")
-        print("Project created succesfully!")
-
-    # starts dev server for react projects
-    subprocess.call("npm start", shell=True)
-
-except Exception as e:
-    print("There was an error when creating the project:{}")
-    DeleteGitHubRepo()
+    answer = input("Desea crear otro repositorio? (Y/n)")
+    if(answer == "n"):
+        exitApp = true
+        print("Cerrando la aplicación...")
