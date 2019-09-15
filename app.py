@@ -20,7 +20,7 @@ directory = config.get("DEFAULT", "directory")
 editor = config.get("DEFAULT", "editor")
 projectName = ""
 projectType = ""
-exitApp = false
+exitApp = False
 
 
 # Inicializa las variables globales
@@ -33,6 +33,7 @@ def Init(project, repo):
 
 # Proceso para crear nueva aplicación react
 def React():
+    print("Creando proyecto {}...".format(projectName))
     subprocess.check_call(
         "npx create-react-app {}".format(projectName), shell=True)
     os.chdir(projectName)
@@ -61,6 +62,7 @@ def CreateGitHubRepo():
     global password
     GetCredentials()
     try:
+        print("Creando repositorio Github...")
         user = Github(username, password).get_user()
         user.create_repo(repoName)
         return True
@@ -72,6 +74,7 @@ def CreateGitHubRepo():
 
 
 def DeleteGitHubRepo():
+    print("Eliminando repositorio Github...")
     global repoName
     global username
     global password
@@ -79,9 +82,12 @@ def DeleteGitHubRepo():
         user = Github(username, password)
         repo = user.get_repo("{}/{}".format(username, repoName))
         repo.delete()
+        print("Repositorio Github eliminado!")
     except Exception as e:
         print(str(e))
-        print("""No se puedo eliminar el repositorio \'{}\'. Elimínelo manualmente.""".format(
+        print("""
+        No se puedo eliminar el repositorio \'{}\'. Elimínelo manualmente.
+        """.format(
             repoName))
 
 
@@ -150,6 +156,6 @@ while exitApp is False:
         DeleteGitHubRepo()
 
     answer = input("Desea crear otro repositorio? (Y/n)")
-    if(answer is "n"):
-        exitApp = true
+    if(answer == "n"):
+        exitApp = True
         print("Cerrando la aplicación...")
