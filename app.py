@@ -18,7 +18,7 @@ def hello():
 
 # configure parser para el script.config
 config = configparser.ConfigParser()
-config.read("script.config")
+config.read("app.config")
 
 # variables globales
 projectName = ""
