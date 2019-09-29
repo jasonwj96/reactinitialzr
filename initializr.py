@@ -3,39 +3,32 @@ import pyfiglet
 import getpass
 import configparser
 import re
+import subprocess
 
-# == Variables globales ====================================
+# Variables globales
 exitApp = False
 decoratorLength = 65
 decoratorSymbol = "="
-# ==== Archivo de configuracion ===========================
+# Archivo de configuracion
 config = configparser.ConfigParser()
 config.read("app.config")
-# ==== Variables del proyecto React=========================
+# Variables del proyecto React
 projectName = ""
 projectPath = config.get("DEFAULT", "directory")
-# ==== Variables Github ====================================
+# Variables Github
 githubRepoName = ""
 githubUsername = ""
 githubPassword = ""
 
-# ==== Variables de editor ================================
+# Variables de editor
 editor = ""  # leer el archivo de configuración app.config
 
-# ==== Workflow de la aplicación ==========================
+# Workflow de la aplicación
 # 1. Inicializar variables del proyecto
 # 2. Crear el proyecto React.js con create-react-app
 # 4. Crear un repositorio en Github y subir el proyecto
 # 5. Iniciar el editor de texto
 # 6. Iniciar el servidor React.JS en localhost
-
-
-# Inicializar las variables requeridas
-def init_project(projName, projPath):
-    global projectPath
-    projectPath = projPath
-    global projectName
-    projectName = projName
 
 
 def separator():
@@ -49,6 +42,19 @@ def show_logo():
     separator()
 
 
+# Inicializar las variables requeridas
+def init_project(projName, projPath):
+    global projectPath
+    projectPath = projPath
+    global projectName
+    projectName = projName
+
+
+def create_react_app():
+    print(f"Creando proyecto {projectName}...")
+    subprocess.check_call(f"npx create-react app {projectName}")
+
+
 # Programa principal
 def app():
 
@@ -56,14 +62,14 @@ def app():
     global exitApp
     while exitApp is False:
         # fase para definir ubicación y nombre del proyecto
-        print("// Fase 1 //")
+        print("-- Fase 1 --")
 
-        # Caracteres inválidos \ / < > : ! * | ?
         proj = input("Escriba el nombre el proyecto React.js ==> ").strip()
 
-        while re.findall(r"[\\/<>:!*|?.]", proj):
+        # Caracteres inválidos en Windows, Linux y MacOS: \ / < > : ! * | ?
+        while re.findall(r"[\\/<>:!*|?.\"]", proj):
             print(
-                "El nombre de proyecto no puede contener los caracteres: \ / < > : ! * . | ?")
+                r"El nombre de proyecto no puede contener los caracteres: \" \ / < > : ! * . | ?")
             proj = input(
                 "Introduzca otro nombre para el proyecto React.js ==> ").strip()
 
