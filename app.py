@@ -4,6 +4,16 @@ from github import Github
 import configparser
 import pyfiglet
 import getpass
+from flask import Flask, escape, request
+
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello():
+    name = request.args.get("name", "World")
+    return f'Hello, {escape(name)}!'
 
 
 # configure parser para el script.config
@@ -13,12 +23,10 @@ config.read("script.config")
 # variables globales
 projectName = ""
 repoName = ""
-repoName = ""
 username = config.get("DEFAULT", "username")
 password = config.get("DEFAULT", "password")
 directory = config.get("DEFAULT", "directory")
 editor = config.get("DEFAULT", "editor")
-projectName = ""
 projectType = ""
 exitApp = False
 
