@@ -14,7 +14,8 @@ config = configparser.ConfigParser()
 config.read("app.config")
 # Variables del proyecto React
 projectName = ""
-projectPath = config.get("DEFAULT", "directory")
+projectPath = ""
+workspacePath = config.get("DEFAULT", "directory")
 # Variables Github
 githubRepoName = ""
 githubUsername = ""
@@ -43,16 +44,16 @@ def show_logo():
 
 
 # Inicializar las variables requeridas
-def init_project(projName, projPath):
-    global projectPath
-    projectPath = projPath
+def init_project(projName, workPath):
+    global workspacePath
+    workspacePath = workPath
     global projectName
     projectName = projName
 
 
 def create_react_app():
-    print(f"Creando proyecto {projectName}...")
-    subprocess.check_call(f"npx create-react app {projectName}")
+    subprocess.check_call(
+        "npx create-react-app {}".format(os.path.join(workspacePath, projectName).lower()), shell=True)
 
 
 # Programa principal
@@ -73,13 +74,28 @@ def app():
             proj = input(
                 "Introduzca otro nombre para el proyecto React.js ==> ").strip()
 
-        if(projectPath == ""):
+        # Si no hay un directorio de trabajo por defecto se debe ingresar uno
+        if not workspacePath:
+            # Verifica que el directorio de trabajo exista
             print("No hay una ruta de proyecto por defecto especificada")
-            projPath = input("Introduzca una ruta de directorio ==> ")
-            init_project(proj.strip(), projectPath)
+            workPath = input("Introduzca una ruta de directorio ==> ")
+
+            while not os.path.isdir(workPath):
+                print("La ruta del espacio de trabajo no es válida.")
+                workPath = input("Ingrese una ruta nueva ==> ")
+
+            # Inicializar variables del proyecto
+            init_project(proj.strip(), workPath)
+        else:
+            init_project(proj.strip(), workspacePath)
 
         separator()
         print("// Fase 2 //")
+
+        print(f"Creando proyecto {projectName}...")
+        os.chdir(workspacePath)
+        create_react_app()
+        print("Proyecto React.js creado!")
 
         exit = input(f"Desea crear otro proyecto? ([Y]es - [N]o)? ==>")
         if exit.strip().lower() == "n":

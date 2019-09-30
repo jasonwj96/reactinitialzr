@@ -45,7 +45,6 @@ def React():
     subprocess.check_call(
         "npx create-react-app {}".format(projectName), shell=True)
     os.chdir(projectName)
-
     Init(projectName, repoName)
 
 
