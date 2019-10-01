@@ -1,9 +1,10 @@
 import os
 import pyfiglet
-import getpass
+import getpass as gp
 import configparser
 import re
 import subprocess
+from github import Github
 
 # Variables globales
 exitApp = False
@@ -18,11 +19,11 @@ projectPath = ""
 workspacePath = config.get("DEFAULT", "directory")
 # Variables Github
 githubRepoName = ""
-githubUsername = ""
-githubPassword = ""
+githubUsername = config.get("DEFAULT", "username")
+githubPassword = config.get("DEFAULT", "password")
 
 # Variables de editor
-editor = ""  # leer el archivo de configuración app.config
+defaultEditor = config.get("DEFAULT", "editor")
 
 # Workflow de la aplicación
 # 1. Inicializar variables del proyecto
@@ -56,16 +57,58 @@ def create_react_app():
         "npx create-react-app {}".format(os.path.join(workspacePath, projectName).lower()), shell=True)
 
 
+def GetGithubCredentials():
+    global githubUsername
+    while not githubUsername:
+        print("No hay un usuario Github por defecto configurado")
+        githubUsername = input("Introduzca su usuario Github ==>").strip()
+
+    global githubPassword
+    while not githubPassword:
+        print("No hay una contraseña Github por defecto configurada")
+        githubPassword = gp.getpass(
+            prompt="Introduzca su contraseña Github ==>", stream=None)
+
+
+def CreateGithubRepo():
+    global githubRepoName
+    global githubUsername
+    global githubPassword
+    GetGithubCredentials()
+
+    try:
+        print("Creando repositorio Github...")
+        account = Github(githubUsername, githubPassword).get_user()
+        account.create_repo(githubRepoName)
+        return True
+    except Exception as e:
+        githubUsername = ""
+        githubPassword = ""
+        githubRepoName = ""
+        print(e)
+        return False
+
+
+# Proceso para cerrar la aplicación
+def shutdown():
+    print("Cerrando aplicación...")
+
+
 # Programa principal
 def app():
-
     show_logo()
+
     global exitApp
+    global workspacePath
+    global projectName
+    global githubUsername
+    global githubRepoName
+
     while exitApp is False:
         # fase para definir ubicación y nombre del proyecto
-        print("-- Fase 1 --")
+        print("// Fase 1 //")
 
-        proj = input("Escriba el nombre el proyecto React.js ==> ").strip()
+        proj = input("Escriba el nombre del proyecto React.js ==> ").strip()
 
         # Caracteres inválidos en Windows, Linux y MacOS: \ / < > : ! * | ?
         while re.findall(r"[\\/<>:!*|?.\"]", proj):
@@ -97,15 +140,51 @@ def app():
         create_react_app()
         print("Proyecto React.js creado!")
 
+        print("// Fase 3 //")
+
+        while not CreateGithubRepo():
+            print("Hubo un error al crear el repositorio Github, intente de nuevo")
+
+        try:
+
+            os.chdir(os.path.join(workspacePath, projectName))
+
+            # Si el repositorio se creó ejecutar versionamiento en Git
+            subprocess.call("git init", shell=True)
+            subprocess.call("git add .", shell=True)
+            subprocess.call('git commit -m "initial commit"', shell=True)
+            subprocess.call(
+                """
+                git remote add origin https://github.com/{}/{}
+                """.format(githubUsername, githubRepoName))
+            subprocess.call("git push -u origin master", shell=True)
+
+            print("Proyecto Github versionado correctamente")
+
+        except Exception as e:
+            print("Hubo un error al versionar el proyecto Github")
+            print(e)
+
+        print("// Fase 4 //")
+
+        # Si el proyecto se versiona correctamente iniciar el editor
+        if not defaultEditor:
+            print("No hay un editor por defecto configurado.")
+        else:
+            print("Iniciando editor {}...".format(defaultEditor))
+            subprocess.call("{} .".format(defaultEditor), shell=True)
+
+        print("// Fase 5 //")
+
+        # Iniciar el servidor React
+        print("Iniciando el servidor...")
+        subprocess.call("npm start", shell=True)
+        print("Servidor iniciado! En breve se abrirá una pestaña en su navegador")
+
         exit = input(f"Desea crear otro proyecto? ([Y]es - [N]o)? ==>")
         if exit.strip().lower() == "n":
             exitApp = True
             shutdown()
-
-
-# Proceso para cerrar la aplicación
-def shutdown():
-    print("Cerrando aplicación...")
 
 
 app()
