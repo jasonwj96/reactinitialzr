@@ -50,11 +50,13 @@ def init_project(projName, workPath):
     workspacePath = workPath
     global projectName
     projectName = projName
+    global projectPath
+    projectPath = os.path.join(workspacePath, projectName)
 
 
 def create_react_app():
     subprocess.check_call(
-        "npx create-react-app {}".format(os.path.join(workspacePath, projectName).lower()), shell=True)
+        "npx create-react-app {}".format(projectPath).lower(), shell=True)
 
 
 def GetGithubCredentials():
@@ -71,12 +73,14 @@ def GetGithubCredentials():
 
 
 def CreateGithubRepo():
-    global githubRepoName
     global githubUsername
     global githubPassword
-    GetGithubCredentials()
+    global githubRepoName
 
     try:
+        GetGithubCredentials()
+        githubRepoName = input(
+            "Introduzca el nombre del repositorio Github ==>")
         print("Creando repositorio Github...")
         account = Github(githubUsername, githubPassword).get_user()
         account.create_repo(githubRepoName)
@@ -84,9 +88,29 @@ def CreateGithubRepo():
     except Exception as e:
         githubUsername = ""
         githubPassword = ""
-        githubRepoName = ""
-        print(e)
+        print("Hubo un error al crear el repositorio Github")
+        DeleteGitHubRepo()
         return False
+
+
+def DeleteGitHubRepo():
+    print("Eliminando repositorio Github...")
+
+    global githubUsername
+    global githubPassword
+    global githubRepoName
+
+    try:
+        user = Github(githubUsername, githubPassword)
+        repo = user.get_repo("{}/{}".format(githubPassword, githubRepoName))
+        repo.delete()
+        print("Repositorio Github eliminado!")
+    except Exception as e:
+        print(str(e))
+        print("""
+        No se puedo eliminar el repositorio \'{}\'. Elimínelo manualmente.
+        """.format(
+            repoName))
 
 
 # Proceso para cerrar la aplicación
@@ -135,8 +159,10 @@ def app():
         separator()
         print("// Fase 2 //")
 
-        print(f"Creando proyecto {projectName}...")
+        print(f"Creando proyecto {projectName} en {projectPath}...")
+
         os.chdir(workspacePath)
+
         create_react_app()
         print("Proyecto React.js creado!")
 
@@ -146,17 +172,15 @@ def app():
             print("Hubo un error al crear el repositorio Github, intente de nuevo")
 
         try:
-
-            os.chdir(os.path.join(workspacePath, projectName))
+            print(projectPath)
+            os.chdir(projectPath)
 
             # Si el repositorio se creó ejecutar versionamiento en Git
-            subprocess.call("git init", shell=True)
+            # subprocess.call("git init", shell=True)
             subprocess.call("git add .", shell=True)
             subprocess.call('git commit -m "initial commit"', shell=True)
             subprocess.call(
-                """
-                git remote add origin https://github.com/{}/{}
-                """.format(githubUsername, githubRepoName))
+                f"git remote add origin https://github.com/{githubUsername}/{githubRepoName}", shell=True)
             subprocess.call("git push -u origin master", shell=True)
 
             print("Proyecto Github versionado correctamente")
@@ -178,7 +202,7 @@ def app():
 
         # Iniciar el servidor React
         print("Iniciando el servidor...")
-        subprocess.call("npm start", shell=True)
+        subprocess.check_call("npm start", shell=True)
         print("Servidor iniciado! En breve se abrirá una pestaña en su navegador")
 
         exit = input(f"Desea crear otro proyecto? ([Y]es - [N]o)? ==>")
