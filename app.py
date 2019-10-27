@@ -8,7 +8,7 @@ import getpass
 
 # configure parser para el script.config
 config = configparser.ConfigParser()
-config.read("script.config")
+config.read("./script.config")
 
 # variables globales
 projectName = ""
@@ -29,7 +29,6 @@ def Init(project, repo):
     global repoName
     projectName = project
     repoName = repo
-
 
 # Proceso para crear nueva aplicación react
 def React():
