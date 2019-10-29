@@ -25,6 +25,9 @@ RUN npm -v
 RUN npm i -g create-react-app
 # Crear directorio por defecto para los proyectos
 RUN mkdir Projects
+
+RUN git config --global user.email "jasonwj96@gmail.com"
+RUN git config --global user.name "jasonwj96"
+
 # Definir el comando por defecto que se ejecutará al crearse el contenedor
 CMD [ "python", "app.py" ]
-
