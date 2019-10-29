@@ -12,11 +12,11 @@ decoratorLength = 65
 decoratorSymbol = "="
 # Archivo de configuracion
 config = configparser.ConfigParser()
-config.read("app.config")
+config.read("script.config")
 # Variables del proyecto React
 projectName = ""
-projectPath = ""
 workspacePath = config.get("DEFAULT", "directory")
+projectPath = ""
 # Variables Github
 githubRepoName = ""
 githubUsername = config.get("DEFAULT", "username")
@@ -56,7 +56,7 @@ def init_project(projName, workPath):
 
 def create_react_app():
     subprocess.check_call(
-        "npx create-react-app {}".format(projectPath).lower(), shell=True)
+        "npx create-react-app {}".format(projectName).lower(), shell=True)
 
 
 def GetGithubCredentials():
@@ -171,12 +171,13 @@ def app():
         while not CreateGithubRepo():
             print("Hubo un error al crear el repositorio Github, intente de nuevo")
 
+        print("Repositorio Github creado!")
+
         try:
-            print(projectPath)
             os.chdir(projectPath)
 
             # Si el repositorio se creó ejecutar versionamiento en Git
-            # subprocess.call("git init", shell=True)
+            subprocess.call("git init", shell=True)
             subprocess.call("git add .", shell=True)
             subprocess.call('git commit -m "initial commit"', shell=True)
             subprocess.call(
